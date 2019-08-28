@@ -1,4 +1,4 @@
-package main
+package selfOauth
 
 import (
 	"context"
@@ -16,43 +16,6 @@ import (
 	"golang.org/x/randx"
 )
 
-var tokenUserWelcome = template.Must(template.New("").Parse(`<html>
-<body>
-<h1>Welcome to the exemplary OAuth 2.0 Consumer!</h1>
-<p>This is an example app which emulates an OAuth 2.0 consumer application. Usually, this would be your web or mobile
-    application and would use an <a href="https://oauth.net/code/">OAuth 2.0</a> or <a href="https://oauth.net/code/">OpenID
-        Connect</a> library.</p>
-<p>This example requests an OAuth 2.0 Access, Refresh, and OpenID Connect ID Token from the OAuth 2.0 Server (ORY
-    Hydra).
-	To initiate the flow, click the "Authorize Application" button.</p>
-<p>this is {{.URL}} </p>
-<p><a href="{{.URL}}">Authorize application</a></p>
-
-</body>
-</html>`))
-
-var tokenUserError = template.Must(template.New("").Parse(`<html>
-<body>
-<h1>An error occurred</h1>
-<h2>{{ .Name }}</h2>
-<p>{{ .Description }}</p>
-<p>{{ .Hint }}</p>
-<p>{{ .Debug }}</p>
-</body>
-</html>`))
-
-var tokenUserResult = template.Must(template.New("").Parse(`<html>
-<html>
-<head></head>
-<body>
-<ul>
-    <li>Access Token: <code>{{ .AccessToken }}</code></li>
-    <li>Refresh Token: <code>{{ .RefreshToken }}</code></li>
-    <li>Expires in: <code>{{ .Expiry }}</code></li>
-    <li>ID Token: <code>{{ .IDToken }}</code></li>
-</ul>
-</body>
-</html>`))
 
 type urlstr struct {
 	URL string
@@ -65,67 +28,26 @@ type ed struct {
 	Debug       string
 }
 
-type content struct {
+type UserInfo struct {
 	Sid string `json:"sid"`
 	Sub string `json:"sub"`
 }
 
-/*func tmpl(w http.ResponseWriter, r *http.Request) {
-
-	conf := oauth2.Config{
-		ClientID:     "facebook-photo-backup",
-		ClientSecret: "some-secret",
-		Endpoint: oauth2.Endpoint{
-			//TokenURL: "https://ory-hydra-example--hydra:4444/oauth2/token",
-			TokenURL: "https://192.168.31.106:9000/oauth2/token",
-			AuthURL:  "https://192.168.31.106:9000/oauth2/auth",
-		},
-		RedirectURL: "https://127.0.0.1:9010/callback",
-		Scopes:      []string{"openid", "offline", "photos.read"},
-	}
-
-	state, err := randx.RuneSequence(24, randx.AlphaLower)
-	fmt.Println(err)
-	nonce, err := randx.RuneSequence(24, randx.AlphaLower)
-	fmt.Println(err)
-	authCodeURL := conf.AuthCodeURL(
-		string(state),
-		oauth2.SetAuthURLParam("audience", ""),
-		oauth2.SetAuthURLParam("nonce", string(nonce)),
-		oauth2.SetAuthURLParam("prompt", ""),
-		oauth2.SetAuthURLParam("max_age", strconv.Itoa(0)),
-	)
-
-	var tmp urlstr
-	tmp.URL = authCodeURL
-	fmt.Println(authCodeURL)
-	tokenUserWelcome.Execute(w, tmp)
-}*/
-
-func renderHTML(w http.ResponseWriter, file string, data interface{}) {
-	// 获取页面内容
-	t, _ := template.New(file).ParseFiles("views/" + file)
-
-	// 将页面渲染后反馈给客户端
-	t.Execute(w, data)
-}
-
-func main() {
-
+func NewSelfOauth(ClientID, clientSecret string) (*UserInfo, error) {
 	ctx := context.Background()
 	ctx = context.WithValue(context.Background(), oauth2.HTTPClient, &http.Client{Transport: &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}})
 
 	conf := oauth2.Config{
-		ClientID:     "facebook-photo-backup",
-		ClientSecret: "some-secret",
+		ClientID:     ClientID,
+		ClientSecret: clientSecret,
 		Endpoint: oauth2.Endpoint{
 			//TokenURL: "https://ory-hydra-example--hydra:4444/oauth2/token",
 			TokenURL: "https://192.168.31.106:9000/oauth2/token",
 			AuthURL:  "https://192.168.31.106:9000/oauth2/auth",
 		},
-		RedirectURL: "http://127.0.0.1:9010/callback",
+		RedirectURL: "http://127.0.0.1:8082/callback",
 		Scopes:      []string{"openid", "offline", "photos.read"},
 	}
 
@@ -253,12 +175,7 @@ func main() {
 		json.Unmarshal([]byte(contents), &structcontent)
 		fmt.Println(structcontent.Sub)
 
-		t, _ := template.ParseFiles("E:/GoWorks/src/test2/views/welcome.html")
-		t.Execute(w, structcontent)
-		//go shutdown()
-
 	})
 
 	server.ListenAndServe()
-
 }
