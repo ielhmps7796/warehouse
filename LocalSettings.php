@@ -29,7 +29,7 @@ $wgSitename = "B502Wiki";
 $wgScriptPath = "";
 
 ## The protocol and server name to use in fully-qualified URLs
-$wgServer = "http://localhost:32856";
+$wgServer = "http://192.168.1.106:32856";
 
 ## The URL path to static resources (images, scripts, etc.)
 $wgResourceBasePath = $wgScriptPath;
