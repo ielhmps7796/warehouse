@@ -1,0 +1,43 @@
+version: '3'
+services:
+  mediawiki:
+    image: registry.cn-hangzhou.aliyuncs.com/llllllh/mediawiki:v0.1
+    container_name: mediawiki
+    restart: always
+    ports:
+       - "32856:80"
+    links:
+       - database
+    volumes:
+       - /data2/wiki/images:/var/www/html/images
+       - /data2/wiki/LocalSettings.php:/var/www/html/LocalSettings.php
+       - /data2/wiki/LdapAuthentication:/var/www/html/extensions/LdapAuthentication
+  database:
+    image: mysql
+    container_name: wikimysql
+    restart: always
+    ports:
+       - "32849:3306"
+       - "32848:33060"  
+    volumes:
+       - /data/wikimysql/mysql:/var/lib/mysql/mysql     
+       - /data/wikimysql/mywiki:/var/lib/mysql/mywiki     
+       - /data/wikimysql/ibdata1:/var/lib/mysql/ibdata1
+       - /data/wikimysql/mysql.ibd:/var/lib/mysql/mysql.ibd
+    environment:
+       MYSQL_ROOT_PASSWORD: admin
+  openldap:
+     image: osixia/openldap
+     container_name: openldap
+     hostname: b502.com
+     restart: always
+     ports:
+        - "389:389"
+        - "636:636"
+     environment:
+        LDAP_ORGANISATION: b502
+        LDAP_ADMIN_PASSWORD: 502password
+        LDAP_DOMAIN: b502.com
+     volumes:
+        - /data2/ldap/database:/var/lib/ldap
+        - /data2/ldap/config:/etc/ldap/slapd.d
