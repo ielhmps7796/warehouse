@@ -13,7 +13,7 @@ services:
        - /data2/wiki/LocalSettings.php:/var/www/html/LocalSettings.php
        - /data2/wiki/LdapAuthentication:/var/www/html/extensions/LdapAuthentication
   database:
-    image: wikimysql:v0.1
+    image: mysql
     container_name: wikimysql
     restart: always
     ports:
