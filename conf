@@ -1,0 +1,4 @@
+secrets_system=secretsecretsecretsecret
+dsn=postgres://hydra:secret@ory-hydra-example--postgres:5432/hydra?sslmode=disable
+ip=192.168.31.106
+callback=192.168.31.150
