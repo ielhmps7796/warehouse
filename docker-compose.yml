@@ -1,0 +1,10 @@
+version: "3"
+services:
+  youbbs:
+     image: registry.cn-hangzhou.aliyuncs.com/llllllh/goyoubbs:v0.1
+     container_name: youbbs
+     restart: always
+     ports:
+       - "8082:8082"
+     working_dir: /go/src/goyoubbs
+     command: go run main.go
