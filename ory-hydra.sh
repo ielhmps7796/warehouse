@@ -60,7 +60,7 @@ function main(){
 	    --network hydraguide \
             oryd/hydra:v1.0.0 \
             clients create --skip-tls-verify \
-	    --id B502BBS \
+	    --id B502BBSlinux \
             --secret 502password \
 	    --grant-types authorization_code,refresh_token,client_credentials,implicit \
             --response-types token,code,id_token \
