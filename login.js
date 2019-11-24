@@ -117,6 +117,9 @@ client.bind('cn=admin,dc=b502,dc=com', '502password', function (err, res1) {
                 // 根据加密算法选择
                 var cipher = "sha1";
                 switch(hash_type) {
+		    case "SHA":
+			cipher = "sha1";
+			break;
                     case "SSHA":
                         cipher = "sha1";
                         break;

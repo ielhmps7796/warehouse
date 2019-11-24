@@ -86,7 +86,7 @@ function client_install () {
     #apt install software-properties-common
     add-apt-repository cloud-archive:stein
     apt update -y&& apt dist-upgrade -y
-    apt install python-openstackclient -y >>/dev/null
+    apt install python3-openstackclient -y >>/dev/null
     res "安装OpenStack客户端"
 }
 
@@ -216,7 +216,7 @@ function keystone_install () {
         res "创建keystone数据库"
     fi
 
-    apt install keystone apache2 libapache2-mod-wsgi-py3 -y >>/dev/null
+    apt install keystone -y >>/dev/null
     res "安装keystone软件包"
 
  if [ ! -f  /etc/keystone/keystone.conf.bak ]
