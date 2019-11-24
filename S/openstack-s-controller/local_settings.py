@@ -8,7 +8,7 @@ from horizon.utils import secret_key
 
 from openstack_dashboard.settings import HORIZON_CONFIG
 
-DEBUG = false
+DEBUG = False
 
 # This setting controls whether or not compression is enabled. Disabling
 # compression makes Horizon considerably slower, but makes it much easier
@@ -156,8 +156,8 @@ SECRET_KEY = secret_key.generate_or_read_from_file('/var/lib/openstack-dashboard
 # We recommend you use memcached for development; otherwise after every reload
 # of the django development server, you will have to login again. To use
 # memcached set CACHES to something like
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-#SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+#SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
